@@ -1,117 +1,117 @@
-# Enterprise Task Manager 🚀
+# 🚀 NestTask: Full-Stack Task Management
 
-A full-stack, enterprise-grade Task Management application built with a modern TypeScript ecosystem. This project demonstrates a clean, decoupled architecture using a NestJS REST API and a React frontend, managed as a monorepo.
+An enterprise-grade Task Management ecosystem built with a focus on **Security**, **Scalability**, and **Developer Experience**. This project features a robust NestJS backend with JWT-protected REST APIs and a modern, high-performance React frontend.
 
+---
 
+## 📸 Preview
+
+<div align="center">
+  <img src="screenshots/Login.png" width="400" alt="Login Page" />
+  <img src="screenshots/Register.png" width="400" alt="Register Page" />
+  <img src="screenshots/Tasks.png" width="850" alt="Tasks Dashboard" />
+</div>
+
+---
+
+## ✨ Advanced Features
+
+### **Security & Identity**
+
+* **JWT Authentication:** Secure stateless authentication using JSON Web Tokens.
+* **Encrypted Passwords:** Industry-standard hashing using `bcrypt`.
+* **Data Isolation:** Multi-user support where users can only access their own data via verified Token payloads.
+
+### **Backend Excellence (NestJS)**
+
+* **Automated API Docs:** Interactive **Swagger/OpenAPI** documentation available at `/api`.
+* **Unified Response Envelope:** All API responses (Success/Error) follow a standardized JSON structure via Global Interceptors and Exception Filters.
+* **Type-Safe ORM:** Prisma v6 with PostgreSQL for predictable and fast database operations.
+
+### **Frontend Experience (React)**
+
+* **Glassmorphism UI:** A sleek, modern dark-themed interface built with Ant Design.
+* **Dynamic UX:** Real-time feedback using AntD messages and **Skeleton Loading** for perceived performance.
+* **Stateful Navigation:** Automatic login persistence and profile management.
+* **Service Layer:** Fully decoupled Axios service architecture for clean API communication.
+
+---
 
 ## 🛠️ Tech Stack
 
 ### **Backend (`/task-app-backend`)**
-* **Framework:** [NestJS](https://nestjs.com/) (Node.js)
-* **Database:** [PostgreSQL](https://www.postgresql.org/)
-* **ORM:** [Prisma v6](https://www.prisma.io/)
-* **Architecture:** Controller-Service-Provider Pattern with Dependency Injection.
-* **Language:** TypeScript
+
+* **Framework:** [NestJS](https://nestjs.com/)
+* **Auth:** Passport.js & JWT
+* **Documentation:** Swagger UI
+* **Database:** PostgreSQL
+* **ORM:** Prisma v6
+* **Tools:** class-validator, bcrypt
 
 ### **Frontend (`/task-app-frontend`)**
-* **Framework:** [React](https://react.dev/) (Vite)
-* **UI Library:** [Ant Design (antd)](https://ant.design/)
-* **Icons:** @ant-design/icons
-* **HTTP Client:** [Axios](https://axios-http.com/) (with centralized service layer)
-* **Language:** TypeScript
+
+* **Framework:** React 18 (Vite)
+* **UI System:** Ant Design (antd)
+* **Animation:** CSS Keyframes & Glassmorphism
+* **State:** React Hooks (useState/useEffect)
+* **HTTP:** Axios with Interceptors
 
 ---
 
 ## 📂 Project Structure
 
-This project is structured as a monorepo to keep the frontend and backend synchronized.
-
 ```text
 task-app/
-├── task-app-backend/     # NestJS API, Prisma Schema, and DB logic
-└── task-app-frontend/    # React SPA, Ant Design UI, and API Services
+├── task-app-backend/         
+│   ├── src/common/           # Global Interceptors & Exception Filters
+│   ├── src/auth/             # JWT Strategy & Passport Logic
+│   ├── src/tasks/            # Task CRUD with User Ownership logic
+│   └── prisma/               # Database Schema & Migrations
+└── task-app-frontend/        
+    ├── src/api/              # Centralized Axios Client
+    ├── src/services/         # Business logic services (Auth/Task)
+    ├── src/pages/            # View components (Login/Register/Tasks)
+    └── src/types/            # Unified TypeScript Interfaces
 
 ```
 
 ---
 
-## 🚀 Getting Started
-
-To run this project locally, ensure you have **Node.js**, **pnpm**, and **PostgreSQL** installed.
+## 🚀 Installation & Setup
 
 ### 1. Backend Setup
 
-Navigate to the backend directory and install dependencies:
-
 ```bash
 cd task-app-backend
-pnpm install
+npm install
 
-```
+# Setup environment variables (.env)
+DATABASE_URL="postgresql://user:pass@localhost:5432/task_manager"
+JWT_SECRET="your_ultra_secure_secret"
 
-**Database Configuration:**
-Create a `.env` file in the `task-app-backend` folder and add your PostgreSQL connection string:
+# Sync database
+npx prisma generate
+npx prisma db push
 
-```env
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/task_manager?schema=public"
-
-```
-
-**Sync Database & Start Server:**
-
-```bash
-# Push the schema to your local PostgreSQL instance
-pnpm dlx prisma db push
-
-# Generate the local Prisma Client
-pnpm prisma generate
-
-# Start the NestJS server (runs on http://localhost:3000)
-pnpm run start:dev
+# Start API (Documentation at http://localhost:3000/api)
+npm run start:dev
 
 ```
 
 ### 2. Frontend Setup
 
-Open a new terminal window, navigate to the frontend directory:
-
 ```bash
 cd task-app-frontend
-pnpm install
-
-# Start the Vite development server (runs on http://localhost:5173)
-pnpm run dev
+npm install
+npm run dev
 
 ```
-
----
-
-## ✨ Key Features Implemented
-
-* **Full CRUD Operations:** Create, Read, Update, and Delete tasks.
-* **Persistent Storage:** Data is stored in a local PostgreSQL database via Prisma ORM.
-* **Clean API Service Layer:** Frontend uses a centralized Axios client and dedicated service files for better maintainability.
-* **Strict Typing:** Shared TypeScript interfaces between the frontend and backend logic.
-* **Enterprise UI:** Professional look and feel using Ant Design components.
-* **CORS Enabled:** Secured communication between different local origins.
 
 ---
 
 ## 👨‍💻 Author
 
 **Pubudu Ishan**
-
-* **GitHub:** [@pubuduishandev](https://github.com/pubuduishandev)
-* **Role:** Software Engineer
-
-```
-
-### How to push this to GitHub now:
-1. Open your terminal in the root `task-app` folder.
-2. Run these commands:
-```bash
-git add README.md
-git commit -m "docs: add full-stack documentation"
-git push
-
-```
+*Software Engineer* <br />
+*GitHub: [@pubuduishandev](https://github.com/pubuduishandev)* <br />
+*LinkedIn: [@pubuduishandigital](https://www.linkedin.com/in/pubuduishandigital/)*
