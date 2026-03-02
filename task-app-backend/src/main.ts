@@ -1,5 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +13,12 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
+
+  // 1. Handle Success
+  app.useGlobalInterceptors(new TransformInterceptor());
+
+  // 2. Handle Errors (This makes them match!)
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   await app.listen(3000);
 }
