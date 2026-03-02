@@ -1,142 +1,85 @@
 import { useEffect, useState } from 'react';
-import { Layout, Typography, List, Checkbox, Input, Button, Card, message, Modal } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { TaskService } from './services/task.service';
-import type { Task } from './types/task.types';
-
-const { Header, Content } = Layout;
-const { Title } = Typography;
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { message } from 'antd';
+import SplashScreen from './pages/SplashScreen';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import TasksPage from './pages/TasksPage';
+import { AuthService } from './services/auth.service';
+import type { User } from './types/task.types';
 
 export default function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  
-  // Edit Modal State
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [editTitle, setEditTitle] = useState('');
-
-  // --- SERVICE CALLS ---
-
-  const loadTasks = async () => {
-    try {
-      const data = await TaskService.getAllTasks();
-      setTasks(data);
-    } catch (error) {
-      message.error('Failed to load tasks from backend');
-    }
-  };
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true); // Start as loading for splash
+  const navigate = useNavigate();
 
   useEffect(() => {
-    loadTasks();
-  }, []); // Runs once on mount
+    const init = async () => {
+      await new Promise(res => setTimeout(res, 2000));
+      const saved = AuthService.getUser();
+      if (saved) {
+        setUser(saved);
+      }
+      setLoading(false);
+    };
+    init();
+  }, []);
 
-  const handleCreate = async () => {
-    if (!newTaskTitle.trim()) return;
+  const handleAuth = async (values: any, type: 'LOGIN' | 'REGISTER') => {
+    setLoading(false); // We use a local loading state for buttons, or reuse a state
     try {
-      await TaskService.createTask({ title: newTaskTitle });
-      setNewTaskTitle('');
-      loadTasks();
-      message.success('Task created successfully');
-    } catch (error) {
-      message.error('Failed to create task');
+      // The AuthService now returns the User object after saving the token internally
+      const loggedUser = type === 'LOGIN' 
+        ? await AuthService.login(values) 
+        : await AuthService.register(values);
+      
+      console.log("Auth Success:", loggedUser);
+
+      if (loggedUser && loggedUser.id) {
+        setUser(loggedUser);
+        message.success(type === 'LOGIN' ? 'Welcome back!' : 'Account created!');
+        navigate('/tasks');
+      } else {
+        message.error("Invalid user data received");
+      }
+    } catch (err: any) {
+      // This catches 401 Unauthorized or 409 Conflict from NestJS
+      const errorMsg = err.response?.data?.message || 'Authentication Failed';
+      message.error(errorMsg);
     }
   };
 
-  const handleToggleStatus = async (id: string, currentStatus: boolean) => {
-    try {
-      await TaskService.updateTask(id, { isCompleted: !currentStatus });
-      loadTasks();
-    } catch (error) {
-      message.error('Failed to update task status');
-    }
+  const handleLogout = () => {
+    AuthService.logout();
+    setUser(null);
+    navigate('/login');
+    message.success('Logged out');
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      await TaskService.deleteTask(id);
-      loadTasks();
-      message.success('Task deleted');
-    } catch (error) {
-      message.error('Failed to delete task');
-    }
-  };
-
-  const handleSaveEdit = async () => {
-    if (!editingTask || !editTitle.trim()) return;
-    try {
-      await TaskService.updateTask(editingTask.id, { title: editTitle });
-      setIsEditModalOpen(false);
-      loadTasks();
-      message.success('Task updated');
-    } catch (error) {
-      message.error('Failed to save changes');
-    }
-  };
-
-  // --- UI RENDERING ---
+  if (loading) return <SplashScreen />;
 
   return (
-    <Layout style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
-      <Header style={{ backgroundColor: '#1890ff', display: 'flex', alignItems: 'center' }}>
-        <Title level={3} style={{ color: 'white', margin: 0 }}>Enterprise Task Manager</Title>
-      </Header>
-      
-      <Content style={{ padding: '50px', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
-        
-        <Card style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <Input 
-              placeholder="What needs to be done?" 
-              value={newTaskTitle}
-              onChange={(e) => setNewTaskTitle(e.target.value)}
-              onPressEnter={handleCreate}
-            />
-            <Button type="primary" onClick={handleCreate}>Add Task</Button>
-          </div>
-        </Card>
+    <Routes>
+      {/* Public Routes */}
+      <Route 
+        path="/login" 
+        element={<LoginPage onLogin={(v) => handleAuth(v, 'LOGIN')} onSwitchToRegister={() => navigate('/register')} loading={false} />} 
+      />
+      <Route 
+        path="/register" 
+        element={<RegisterPage onRegister={(v) => handleAuth(v, 'REGISTER')} onSwitchToLogin={() => navigate('/login')} loading={false} />} 
+      />
 
-        <Card title="Your Tasks">
-          <List
-            dataSource={tasks}
-            locale={{ emptyText: 'No tasks found. Create one to get started!' }}
-            renderItem={(task) => (
-              <List.Item
-                actions={[
-                  <Button type="text" icon={<EditOutlined />} onClick={() => {
-                    setEditingTask(task);
-                    setEditTitle(task.title);
-                    setIsEditModalOpen(true);
-                  }} />,
-                  <Button danger type="text" icon={<DeleteOutlined />} onClick={() => handleDelete(task.id)} />
-                ]}
-              >
-                <Checkbox 
-                  checked={task.isCompleted} 
-                  onChange={() => handleToggleStatus(task.id, task.isCompleted)}
-                  style={{ textDecoration: task.isCompleted ? 'line-through' : 'none', fontSize: '16px' }}
-                >
-                  {task.title}
-                </Checkbox>
-              </List.Item>
-            )}
-          />
-        </Card>
+      {/* Protected Route */}
+      <Route 
+        path="/tasks" 
+        element={user ? <TasksPage user={user} setUser={setUser} onLogout={handleLogout} setStage={function (stage: 'LOGIN' | 'REGISTER' | 'TASKS' | 'SPLASH'): void {
+          throw new Error('Function not implemented.');
+        } } /> : <Navigate to="/login" />} 
+      />
 
-        <Modal 
-          title="Edit Task" 
-          open={isEditModalOpen} 
-          onOk={handleSaveEdit} 
-          onCancel={() => setIsEditModalOpen(false)}
-        >
-          <Input 
-            value={editTitle} 
-            onChange={(e) => setEditTitle(e.target.value)} 
-            onPressEnter={handleSaveEdit}
-          />
-        </Modal>
-
-      </Content>
-    </Layout>
+      {/* Default Redirect */}
+      <Route path="*" element={<Navigate to={user ? "/tasks" : "/login"} />} />
+    </Routes>
   );
 }
