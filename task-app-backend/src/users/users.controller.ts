@@ -2,7 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request }
 import { UsersService } from './users.service';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
-
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+@ApiTags('auth')
 @Controller('auth')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
