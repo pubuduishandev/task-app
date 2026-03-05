@@ -8,10 +8,10 @@ A simple Task Management ecosystem built with a focus on **Security**, **Scalabi
 
 <div align="center">
   <img src="screenshots/Login.png" alt="Login Page" />
-  <p>Figure 1 - Login Screen</p>
+  <p>Figure 1 - User Login Page</p>
 
   <img src="screenshots/Register.png" alt="Register Page" />
-  <p>Figure 2 - Register Screen</p>
+  <p>Figure 2 - User Onboarding Page</p>
 
   <img src="screenshots/Tasks.png" alt="Tasks Dashboard" />
   <p>Figure 3 -Tasks Dashboard</p>
