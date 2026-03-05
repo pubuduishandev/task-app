@@ -1,6 +1,6 @@
 # 🚀 NestTask: Full-Stack Task Management
 
-An enterprise-grade Task Management ecosystem built with a focus on **Security**, **Scalability**, and **Developer Experience**. This project features a robust NestJS backend with JWT-protected REST APIs and a modern, high-performance React frontend.
+A simple Task Management ecosystem built with a focus on **Security**, **Scalability**, and **Developer Experience**. This project features a robust NestJS backend with JWT-protected REST APIs and a modern, high-performance React frontend.
 
 ---
 
@@ -111,7 +111,7 @@ npm run dev
 
 ## 👨‍💻 Author
 
-**Pubudu Ishan**
+**Pubudu Ishan Wickrama Arachchi** <br />
 *Software Engineer* <br />
 *GitHub: [@pubuduishandev](https://github.com/pubuduishandev)* <br />
 *LinkedIn: [@pubuduishandigital](https://www.linkedin.com/in/pubuduishandigital/)*
