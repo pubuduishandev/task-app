@@ -69,7 +69,8 @@ A simple Task Management ecosystem built with a focus on **Security**, **Scalabi
 task-app/
 ├── task-app-backend/         
 │   ├── src/common/           # Global Interceptors & Exception Filters
-│   ├── src/auth/             # JWT Strategy & Passport Logic
+│   ├── src/prisma/           # DB Modules & Services
+│   ├── src/users/            # JWT Strategy & Passport Logic
 │   ├── src/tasks/            # Task CRUD with User Ownership logic
 │   └── prisma/               # Database Schema & Migrations
 └── task-app-frontend/        
