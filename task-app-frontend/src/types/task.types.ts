@@ -1,4 +1,3 @@
-// Notice the 'export' keyword here! - task.types.ts
 export interface Task {
   id: string;
   title: string;
