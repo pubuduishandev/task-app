@@ -109,6 +109,17 @@ npm run dev
 
 ---
 
+## 🚀 Future Enhancements
+
+- **Mobile Application (React Native):** Develop a cross-platform mobile companion app sharing the same backend ecosystem.
+- **Single Sign-On (SSO):** Integrate OAuth2 authentication (Google, Facebook, Microsoft) to provide seamless, enterprise-grade login options.
+- **Task Reminders & Notifications:** Implement a background job queue (using Redis and BullMQ) to send automated email and push notifications for approaching deadlines.
+- **Recurring Tasks:** Add scheduling capabilities to support daily, weekly, or custom recurring task generation.
+- **Real-Time Synchronization:** Integrate WebSockets (Socket.io) to instantly push state changes to the frontend, ensuring data is synced across multiple tabs or devices without refreshing.
+- **Collaborative Workspaces:** Introduce role-based access control (RBAC) to allow users to share task boards, assign tasks to others, and collaborate in real-time.
+- **Smart AI Prioritization:** Implement a lightweight machine learning model to automatically suggest task categories and priorities based on the task description and user behavior.
+- **Advanced Export & Analytics:** Provide features to export task history to CSV/PDF and view productivity metrics via interactive dashboard charts.
+
 ## 👨‍💻 Author
 
 **Pubudu Ishan**
